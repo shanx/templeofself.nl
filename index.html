@@ -88,12 +88,46 @@
                 line-height: 1.2;
                 margin: 24px 0 8px;
             }
-            .lead {
+            /* Live funding progress */
+            .funding {
+                max-width: 34em;
+                margin: 0 auto 24px;
+            }
+            .funding-top {
+                display: flex;
+                align-items: baseline;
+                justify-content: center;
+                gap: 8px;
+                flex-wrap: wrap;
+            }
+            .funding-raised {
+                font-size: 1.7rem;
+                font-weight: 700;
+                color: var(--secondary);
+            }
+            .funding-target {
+                color: var(--muted);
+            }
+            .funding-bar {
+                height: 9px;
+                border-radius: 6px;
+                background: #e2e2e8;
+                overflow: hidden;
+                margin: 12px 0 6px;
+            }
+            .funding-fill {
+                display: block;
+                height: 100%;
+                width: 0;
+                background: var(--primary);
+                border-radius: 6px;
+                transition: width 0.7s ease;
+            }
+            .funding-count {
                 text-align: center;
                 color: var(--muted);
-                font-size: 1.05rem;
-                margin: 0 auto 24px;
-                max-width: 34em;
+                font-size: 0.9rem;
+                min-height: 1.2em;
             }
 
             /* Intro text */
@@ -268,10 +302,20 @@
     <body>
         <div class="page">
             <h1>Een nieuwe Tempel op Ruigoord</h1>
-            <p class="lead">
-                2000&nbsp;×&nbsp;€10, dat moet lukken! Help mee een nieuwe Tempel
-                te bouwen die het hele jaar door gebruikt kan worden.
-            </p>
+
+            <!-- Live funding progress (fetched from the Whydonate API) -->
+            <div class="funding" id="funding" aria-live="polite">
+                <div class="funding-top">
+                    <span class="funding-raised" id="f-raised">€0</span>
+                    <span class="funding-target" id="f-target"
+                        >opgehaald van €9.000</span
+                    >
+                </div>
+                <div class="funding-bar">
+                    <span class="funding-fill" id="f-fill"></span>
+                </div>
+                <div class="funding-count" id="f-count"></div>
+            </div>
 
             <!-- Donation form — top of the page -->
             <div class="widget-wrap">
@@ -517,6 +561,8 @@
                     ".wd-part-donation-options-label{margin-top:8px !important;}" +
                     ".wd-part-donation-options{margin-bottom:26px !important;}";
                 const MARK = "data-wd-hide-injected";
+                const LEAD =
+                    "2000 × €10, dat moet lukken! Help mee een nieuwe Tempel te bouwen die het hele jaar door gebruikt kan worden.";
 
                 function injectInto(root) {
                     if (!root || root.querySelector("style[" + MARK + "]")) return;
@@ -525,15 +571,32 @@
                     style.textContent = CSS;
                     root.appendChild(style);
                 }
+                // Put the lead sentence just above the "Select Amount" label,
+                // inside the widget's shadow DOM (below the image).
+                function insertLead(root) {
+                    const label = root.querySelector(
+                        ".wd-part-donation-options-label"
+                    );
+                    if (!label || root.querySelector("[data-wd-lead]")) return;
+                    const p = document.createElement("p");
+                    p.setAttribute("data-wd-lead", "");
+                    p.textContent = LEAD;
+                    p.style.cssText =
+                        "margin:0 0 20px;font-size:1rem;line-height:1.5;" +
+                        "font-weight:500;color:#2E2C96;";
+                    label.parentNode.insertBefore(p, label);
+                }
                 function scan(node) {
                     if (!node || !node.querySelectorAll) return;
                     if (node.shadowRoot) {
                         injectInto(node.shadowRoot);
+                        insertLead(node.shadowRoot);
                         scan(node.shadowRoot);
                     }
                     node.querySelectorAll("*").forEach(function (el) {
                         if (el.shadowRoot) {
                             injectInto(el.shadowRoot);
+                            insertLead(el.shadowRoot);
                             scan(el.shadowRoot);
                         }
                     });
@@ -550,6 +613,51 @@
                 setTimeout(function () {
                     clearInterval(iv);
                 }, 15000);
+            })();
+        </script>
+
+        <!-- Live funding amount from the Whydonate API -->
+        <script>
+            (function () {
+                fetch(
+                    "https://fundraiser.whydonate.dev/fundraiser/get?slug=new-temple-for-ruigoord&language=nl"
+                )
+                    .then(function (r) {
+                        return r.json();
+                    })
+                    .then(function (json) {
+                        const d = json.data.result;
+                        const sym = d.currency_symbol || "€";
+                        const raised = Number(
+                            (d.donation && d.donation.amount) || 0
+                        );
+                        const count = Number(
+                            (d.donation && d.donation.count) || 0
+                        );
+                        const target = Number(d.amount_target || 0);
+                        const nl = function (n) {
+                            return n.toLocaleString("nl-NL");
+                        };
+                        document.getElementById("f-raised").textContent =
+                            sym + " " + nl(raised);
+                        if (target > 0) {
+                            document.getElementById("f-target").textContent =
+                                "opgehaald van " + sym + " " + nl(target);
+                            const pct = Math.max(
+                                raised > 0 ? 2 : 0,
+                                Math.min(100, (raised / target) * 100)
+                            );
+                            document.getElementById("f-fill").style.width =
+                                pct + "%";
+                        }
+                        document.getElementById("f-count").textContent =
+                            count === 1
+                                ? "1 donatie"
+                                : nl(count) + " donaties";
+                    })
+                    .catch(function () {
+                        /* keep the static fallback amounts */
+                    });
             })();
         </script>
     </body>
