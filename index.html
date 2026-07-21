@@ -108,6 +108,26 @@
             .intro p {
                 margin: 0 0 14px;
             }
+            .cf-link {
+                display: block;
+                width: fit-content;
+                max-width: 100%;
+                margin: 28px auto 0;
+                padding: 13px 22px;
+                border-radius: 27px;
+                background: var(--primary);
+                color: #fff;
+                font-weight: 600;
+                text-align: center;
+                text-decoration: none;
+                transition: background 0.2s, transform 0.1s;
+            }
+            .cf-link:hover {
+                background: #2aa549;
+            }
+            .cf-link:active {
+                transform: translateY(1px);
+            }
 
             /* Carousel — mobile first, CSS scroll-snap */
             .carousel {
@@ -396,6 +416,14 @@
                     doneren, dat moet lukken! Dankjewel voor je bijdrage.
                 </p>
             </div>
+
+            <a
+                class="cf-link"
+                href="https://whydonate.com/fundraising/new-temple-for-ruigoord"
+                target="_blank"
+                rel="noopener"
+                >Bekijk de volledige crowdfunding op Whydonate →</a
+            >
         </div>
 
         <script
