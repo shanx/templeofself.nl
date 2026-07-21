@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="color-scheme" content="dark" />
         <title>Een nieuwe Tempel op Ruigoord</title>
 
         <!-- Social pre-render (WhatsApp / Signal / Telegram / iMessage / Facebook) -->
@@ -45,11 +46,12 @@
         />
         <style>
             :root {
+                color-scheme: dark;
                 --primary: #32bf55;
                 --secondary: #2e2c96;
-                --ink: #26262b;
-                --muted: #5b5b66;
-                --bg: #f5f5f5;
+                --ink: #ececf0;
+                --muted: #a6a6b0;
+                --bg: #17171b;
                 --card-radius: 21px;
             }
             * {
@@ -82,57 +84,16 @@
                 height: auto;
             }
             h1 {
-                color: var(--secondary);
+                color: #fff;
                 text-align: center;
                 font-size: clamp(1.5rem, 6vw, 2.3rem);
                 line-height: 1.2;
                 margin: 24px 0 8px;
             }
-            /* Live funding progress */
-            .funding {
-                max-width: 34em;
-                margin: 0 auto 24px;
-            }
-            .funding-top {
-                display: flex;
-                align-items: baseline;
-                justify-content: center;
-                gap: 8px;
-                flex-wrap: wrap;
-            }
-            .funding-raised {
-                font-size: 1.7rem;
-                font-weight: 700;
-                color: var(--secondary);
-            }
-            .funding-target {
-                color: var(--muted);
-            }
-            .funding-bar {
-                height: 9px;
-                border-radius: 6px;
-                background: #e2e2e8;
-                overflow: hidden;
-                margin: 12px 0 6px;
-            }
-            .funding-fill {
-                display: block;
-                height: 100%;
-                width: 0;
-                background: var(--primary);
-                border-radius: 6px;
-                transition: width 0.7s ease;
-            }
-            .funding-count {
-                text-align: center;
-                color: var(--muted);
-                font-size: 0.9rem;
-                min-height: 1.2em;
-            }
 
             /* Intro text */
             .intro h2 {
-                color: var(--secondary);
+                color: var(--primary);
                 font-size: 1.2rem;
                 margin: 28px 0 6px;
             }
@@ -302,20 +263,6 @@
     <body>
         <div class="page">
             <h1>Een nieuwe Tempel op Ruigoord</h1>
-
-            <!-- Live funding progress (fetched from the Whydonate API) -->
-            <div class="funding" id="funding" aria-live="polite">
-                <div class="funding-top">
-                    <span class="funding-raised" id="f-raised">€0</span>
-                    <span class="funding-target" id="f-target"
-                        >opgehaald van €9.000</span
-                    >
-                </div>
-                <div class="funding-bar">
-                    <span class="funding-fill" id="f-fill"></span>
-                </div>
-                <div class="funding-count" id="f-count"></div>
-            </div>
 
             <!-- Donation form — top of the page -->
             <div class="widget-wrap">
@@ -582,8 +529,8 @@
                     p.setAttribute("data-wd-lead", "");
                     p.textContent = LEAD;
                     p.style.cssText =
-                        "margin:0 0 20px;font-size:1rem;line-height:1.5;" +
-                        "font-weight:500;color:#2E2C96;";
+                        "margin:4px 0 36px;font-size:1rem;line-height:1.5;" +
+                        "font-weight:500;color:#ffffff;";
                     label.parentNode.insertBefore(p, label);
                 }
                 function scan(node) {
@@ -616,49 +563,5 @@
             })();
         </script>
 
-        <!-- Live funding amount from the Whydonate API -->
-        <script>
-            (function () {
-                fetch(
-                    "https://fundraiser.whydonate.dev/fundraiser/get?slug=new-temple-for-ruigoord&language=nl"
-                )
-                    .then(function (r) {
-                        return r.json();
-                    })
-                    .then(function (json) {
-                        const d = json.data.result;
-                        const sym = d.currency_symbol || "€";
-                        const raised = Number(
-                            (d.donation && d.donation.amount) || 0
-                        );
-                        const count = Number(
-                            (d.donation && d.donation.count) || 0
-                        );
-                        const target = Number(d.amount_target || 0);
-                        const nl = function (n) {
-                            return n.toLocaleString("nl-NL");
-                        };
-                        document.getElementById("f-raised").textContent =
-                            sym + " " + nl(raised);
-                        if (target > 0) {
-                            document.getElementById("f-target").textContent =
-                                "opgehaald van " + sym + " " + nl(target);
-                            const pct = Math.max(
-                                raised > 0 ? 2 : 0,
-                                Math.min(100, (raised / target) * 100)
-                            );
-                            document.getElementById("f-fill").style.width =
-                                pct + "%";
-                        }
-                        document.getElementById("f-count").textContent =
-                            count === 1
-                                ? "1 donatie"
-                                : nl(count) + " donaties";
-                    })
-                    .catch(function () {
-                        /* keep the static fallback amounts */
-                    });
-            })();
-        </script>
     </body>
 </html>
