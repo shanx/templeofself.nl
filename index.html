@@ -74,5 +74,52 @@
             src="https://plugin.whydonate.com/wp_styling.js"
             type="text/javascript"
         ></script>
+        <script>
+            // The Whydonate widget renders inside an open shadow DOM, so the
+            // page-level CSS above can't reach it. Inject the hide rules into
+            // every shadow root the widget creates (and re-inject on re-render).
+            (function () {
+                const CSS =
+                    ".wd-part-currency-group,.wd-part-interval-group{display:none !important;}";
+                const MARK = "data-wd-hide-injected";
+
+                function injectInto(root) {
+                    if (!root || root.querySelector("style[" + MARK + "]")) return;
+                    const style = document.createElement("style");
+                    style.setAttribute(MARK, "");
+                    style.textContent = CSS;
+                    root.appendChild(style);
+                }
+
+                function scan(node) {
+                    if (!node || !node.querySelectorAll) return;
+                    if (node.shadowRoot) {
+                        injectInto(node.shadowRoot);
+                        scan(node.shadowRoot);
+                    }
+                    node.querySelectorAll("*").forEach(function (el) {
+                        if (el.shadowRoot) {
+                            injectInto(el.shadowRoot);
+                            scan(el.shadowRoot);
+                        }
+                    });
+                }
+
+                function run() {
+                    scan(document.body);
+                }
+
+                new MutationObserver(run).observe(document.body, {
+                    childList: true,
+                    subtree: true,
+                });
+                run();
+                // Fallback for async renders that outrun the observer.
+                const iv = setInterval(run, 500);
+                setTimeout(function () {
+                    clearInterval(iv);
+                }, 15000);
+            })();
+        </script>
     </body>
 </html>
