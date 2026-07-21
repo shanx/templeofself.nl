@@ -1,15 +1,57 @@
 <!doctype html>
-<html lang="en">
+<html lang="nl">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Een nieuwe Tempel op Ruigoord</title>
+
+        <!-- Social pre-render (WhatsApp / Signal / Telegram / iMessage / Facebook) -->
+        <meta
+            name="description"
+            content="Op Ruigoord staat al 10 jaar de Temple of Self. Help mee een nieuwe Tempel te bouwen die het hele jaar door gebruikt kan worden. 2000 x €10, dat moet lukken!"
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Temple of Self — Ruigoord" />
+        <meta property="og:url" content="https://templeofself.nl/" />
+        <meta property="og:title" content="Een nieuwe Tempel op Ruigoord" />
+        <meta
+            property="og:description"
+            content="Op Ruigoord staat al 10 jaar de Temple of Self. Help mee een nieuwe Tempel te bouwen die het hele jaar door gebruikt kan worden. 2000 x €10, dat moet lukken!"
+        />
+        <meta
+            property="og:image"
+            content="https://whydonate.com/cdn-cgi/imagedelivery/_0vgnXOEIHPwLg2E52a7gg/production/fundraiser_header/b05782b4964c4a1c/public"
+        />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="De Temple of Self op Ruigoord" />
+        <meta property="og:locale" content="nl_NL" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Een nieuwe Tempel op Ruigoord" />
+        <meta
+            name="twitter:description"
+            content="Op Ruigoord staat al 10 jaar de Temple of Self. Help mee een nieuwe Tempel te bouwen. 2000 x €10, dat moet lukken!"
+        />
+        <meta
+            name="twitter:image"
+            content="https://whydonate.com/cdn-cgi/imagedelivery/_0vgnXOEIHPwLg2E52a7gg/production/fundraiser_header/b05782b4964c4a1c/public"
+        />
+        <meta name="theme-color" content="#2E2C96" />
+
         <link
             href="https://plugin.whydonate.com/wdplugin-style.css"
             rel="stylesheet"
             type="text/css"
         />
         <style>
+            :root {
+                --primary: #32bf55;
+                --secondary: #2e2c96;
+                --ink: #26262b;
+                --muted: #5b5b66;
+                --bg: #f5f5f5;
+                --card-radius: 21px;
+            }
             * {
                 box-sizing: border-box;
             }
@@ -17,41 +59,222 @@
             body {
                 margin: 0;
                 padding: 0;
-                background: #f5f5f5;
-                font-family: Roboto, system-ui, sans-serif;
+                background: var(--bg);
+                color: var(--ink);
+                font-family: Roboto, system-ui, -apple-system, sans-serif;
+                line-height: 1.6;
+                -webkit-text-size-adjust: 100%;
             }
             .page {
-                min-height: 100vh;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                padding: 24px 16px;
+                max-width: 640px;
+                margin: 0 auto;
+                padding: 0 16px 48px;
+            }
+
+            /* Hero */
+            .hero {
+                margin: 0 -16px 20px;
+                position: relative;
+            }
+            .hero img {
+                display: block;
+                width: 100%;
+                height: auto;
             }
             h1 {
-                color: #2e2c96;
+                color: var(--secondary);
                 text-align: center;
-                font-size: clamp(1.4rem, 5vw, 2.2rem);
-                margin: 8px 0 24px;
+                font-size: clamp(1.5rem, 6vw, 2.3rem);
+                line-height: 1.2;
+                margin: 24px 0 8px;
             }
+            .lead {
+                text-align: center;
+                color: var(--muted);
+                font-size: 1.05rem;
+                margin: 0 auto 24px;
+                max-width: 34em;
+            }
+
+            /* Intro text */
+            .intro h2 {
+                color: var(--secondary);
+                font-size: 1.2rem;
+                margin: 28px 0 6px;
+            }
+            .intro p {
+                margin: 0 0 14px;
+            }
+
+            /* Carousel — mobile first, CSS scroll-snap */
+            .carousel {
+                margin: 28px -16px;
+            }
+            .carousel-track {
+                display: flex;
+                gap: 10px;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                scroll-behavior: smooth;
+                -webkit-overflow-scrolling: touch;
+                padding: 0 16px;
+                scrollbar-width: none;
+            }
+            .carousel-track::-webkit-scrollbar {
+                display: none;
+            }
+            .slide {
+                flex: 0 0 88%;
+                scroll-snap-align: center;
+                border-radius: var(--card-radius);
+                overflow: hidden;
+                background: #e4e4e8;
+                aspect-ratio: 4 / 3;
+            }
+            .slide img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block;
+            }
+            .dots {
+                display: flex;
+                justify-content: center;
+                gap: 8px;
+                margin-top: 14px;
+            }
+            .dot {
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                border: 0;
+                padding: 0;
+                background: #cfcfd6;
+                cursor: pointer;
+                transition: background 0.2s, transform 0.2s;
+            }
+            .dot[aria-current="true"] {
+                background: var(--primary);
+                transform: scale(1.35);
+            }
+
+            /* Donation widget */
             .widget-wrap {
                 width: 100%;
-                max-width: 520px;
+                margin-top: 8px;
             }
-            /* Keep embedded widget from overflowing on small screens */
             .share-widget,
             .share-widget * {
                 max-width: 100%;
             }
-            /* Hide the currency selector and the one-time/recurring interval toggle */
             .wd-part-currency-group,
             .wd-part-interval-group {
                 display: none !important;
+            }
+
+            /* Larger screens: show a bit more of neighbouring slides */
+            @media (min-width: 560px) {
+                .slide {
+                    flex-basis: 60%;
+                    aspect-ratio: 16 / 10;
+                }
             }
         </style>
     </head>
     <body>
         <div class="page">
+            <div class="hero">
+                <img
+                    src="https://whydonate.com/cdn-cgi/imagedelivery/_0vgnXOEIHPwLg2E52a7gg/production/fundraiser_header/b05782b4964c4a1c/public"
+                    alt="De Temple of Self op Ruigoord"
+                    fetchpriority="high"
+                />
+            </div>
+
             <h1>Een nieuwe Tempel op Ruigoord</h1>
+            <p class="lead">
+                2000&nbsp;×&nbsp;€10, dat moet lukken! Help mee een nieuwe Tempel
+                te bouwen die het hele jaar door gebruikt kan worden.
+            </p>
+
+            <div class="intro">
+                <h2>Een nieuwe Tempel voor het hele jaar</h2>
+                <p>
+                    Op Ruigoord staat al 10 jaar de Temple of Self. Dit open
+                    houten gebouw wordt met name gebruikt als een plek voor
+                    verstilling, verwondering en verbinding tijdens Landjuweel,
+                    het jaarlijkse zomerfestival en hoogtepunt in het dorp. We
+                    willen de huidige structuur gaan vervangen voor een bouw- en
+                    kunstwerk dat het hele jaar door gebruikt kan worden en nog
+                    minimaal 25 jaar weer en wind kan doorstaan.
+                </p>
+
+                <h2>De Temple of Self</h2>
+                <p>
+                    ‘De Tempel’ is een plek voor de spirituele dingen in het
+                    dorp. Een stilteplek waar mensen zich even kunnen
+                    terugtrekken — een thuis voor reflectie, persoonlijke groei
+                    en ontmoeting. Van meditatie en yoga tot kunst en dans, met
+                    een gezonde dosis glitter.
+                </p>
+            </div>
+
+            <!-- Image carousel -->
+            <div
+                class="carousel"
+                role="region"
+                aria-label="Foto's van de Temple of Self"
+            >
+                <div class="carousel-track" id="carousel-track">
+                    <div class="slide">
+                        <img
+                            loading="lazy"
+                            src="https://whydonate.com/cdn-cgi/imagedelivery/_0vgnXOEIHPwLg2E52a7gg/production/fundraiser_images/d1165747b9c54b2b/public"
+                            alt="Temple of Self op Ruigoord"
+                        />
+                    </div>
+                    <div class="slide">
+                        <img
+                            loading="lazy"
+                            src="https://whydonate.com/cdn-cgi/imagedelivery/_0vgnXOEIHPwLg2E52a7gg/production/fundraiser_images/64ce73e981da4b37/public"
+                            alt="Temple of Self op Ruigoord"
+                        />
+                    </div>
+                    <div class="slide">
+                        <img
+                            loading="lazy"
+                            src="https://whydonate.com/cdn-cgi/imagedelivery/_0vgnXOEIHPwLg2E52a7gg/production/fundraiser_images/1aca39b379d7422b/public"
+                            alt="Temple of Self op Ruigoord"
+                        />
+                    </div>
+                    <div class="slide">
+                        <img
+                            loading="lazy"
+                            src="https://whydonate.com/cdn-cgi/imagedelivery/_0vgnXOEIHPwLg2E52a7gg/production/fundraiser_images/7b0dfe2211064c2e/public"
+                            alt="Temple of Self op Ruigoord"
+                        />
+                    </div>
+                    <div class="slide">
+                        <img
+                            loading="lazy"
+                            src="https://whydonate.com/cdn-cgi/imagedelivery/_0vgnXOEIHPwLg2E52a7gg/production/fundraiser_images/c17a0ea0a57d487c/public"
+                            alt="Temple of Self op Ruigoord"
+                        />
+                    </div>
+                </div>
+                <div class="dots" id="carousel-dots" aria-hidden="true"></div>
+            </div>
+
+            <div class="intro">
+                <h2>Doneer voor een mooi startbedrag</h2>
+                <p>
+                    In totaal hebben we naar schatting €500.000 nodig. Met €20.000
+                    kunnen we de fundering leggen — ons eerste streefbedrag. 2000
+                    festival-vierders en Tempel-bewaarders die een tientje of meer
+                    doneren, dat moet lukken! Dankjewel voor je bijdrage.
+                </p>
+            </div>
+
             <div class="widget-wrap">
                 <div
                     id="share-widget-new-temple-for-ruigoord"
@@ -70,14 +293,65 @@
                 ></div>
             </div>
         </div>
+
         <script
             src="https://plugin.whydonate.com/wp_styling.js"
             type="text/javascript"
         ></script>
+
+        <!-- Carousel dots: sync active dot with scroll position -->
         <script>
-            // The Whydonate widget renders inside an open shadow DOM, so the
-            // page-level CSS above can't reach it. Inject the hide rules into
-            // every shadow root the widget creates (and re-inject on re-render).
+            (function () {
+                const track = document.getElementById("carousel-track");
+                const dotsWrap = document.getElementById("carousel-dots");
+                if (!track || !dotsWrap) return;
+                const slides = Array.from(track.querySelectorAll(".slide"));
+
+                slides.forEach(function (_, i) {
+                    const b = document.createElement("button");
+                    b.className = "dot";
+                    b.setAttribute("aria-label", "Ga naar foto " + (i + 1));
+                    if (i === 0) b.setAttribute("aria-current", "true");
+                    b.addEventListener("click", function () {
+                        slides[i].scrollIntoView({
+                            behavior: "smooth",
+                            inline: "center",
+                            block: "nearest",
+                        });
+                    });
+                    dotsWrap.appendChild(b);
+                });
+                const dots = Array.from(dotsWrap.children);
+
+                // Highlight the slide closest to the track centre.
+                let raf = null;
+                track.addEventListener("scroll", function () {
+                    if (raf) return;
+                    raf = requestAnimationFrame(function () {
+                        raf = null;
+                        const mid = track.scrollLeft + track.clientWidth / 2;
+                        let best = 0,
+                            bestDist = Infinity;
+                        slides.forEach(function (s, i) {
+                            const c = s.offsetLeft + s.offsetWidth / 2;
+                            const d = Math.abs(c - mid);
+                            if (d < bestDist) {
+                                bestDist = d;
+                                best = i;
+                            }
+                        });
+                        dots.forEach(function (d, i) {
+                            if (i === best)
+                                d.setAttribute("aria-current", "true");
+                            else d.removeAttribute("aria-current");
+                        });
+                    });
+                });
+            })();
+        </script>
+
+        <!-- Hide currency selector + interval toggle inside the widget's shadow DOM -->
+        <script>
             (function () {
                 const CSS =
                     ".wd-part-currency-group,.wd-part-interval-group{display:none !important;}";
@@ -90,7 +364,6 @@
                     style.textContent = CSS;
                     root.appendChild(style);
                 }
-
                 function scan(node) {
                     if (!node || !node.querySelectorAll) return;
                     if (node.shadowRoot) {
@@ -104,17 +377,14 @@
                         }
                     });
                 }
-
                 function run() {
                     scan(document.body);
                 }
-
                 new MutationObserver(run).observe(document.body, {
                     childList: true,
                     subtree: true,
                 });
                 run();
-                // Fallback for async renders that outrun the observer.
                 const iv = setInterval(run, 500);
                 setTimeout(function () {
                     clearInterval(iv);
