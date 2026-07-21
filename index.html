@@ -83,12 +83,18 @@
                 width: 100%;
                 height: auto;
             }
-            h1 {
-                color: #fff;
-                text-align: center;
-                font-size: clamp(1.5rem, 6vw, 2.3rem);
-                line-height: 1.2;
-                margin: 24px 0 8px;
+            /* Title lives inside the widget card (injected). Keep an h1 in
+               the DOM for SEO/screen readers, but hide it visually. */
+            h1.sr-only {
+                position: absolute;
+                width: 1px;
+                height: 1px;
+                padding: 0;
+                margin: -1px;
+                overflow: hidden;
+                clip: rect(0, 0, 0, 0);
+                white-space: nowrap;
+                border: 0;
             }
 
             /* Intro text */
@@ -262,7 +268,7 @@
     </head>
     <body>
         <div class="page">
-            <h1>Een nieuwe Tempel op Ruigoord</h1>
+            <h1 class="sr-only">Een nieuwe Tempel op Ruigoord</h1>
 
             <!-- Donation form — top of the page -->
             <div class="widget-wrap">
@@ -508,6 +514,7 @@
                     ".wd-part-donation-options-label{margin-top:56px !important;}" +
                     ".wd-part-donation-options{margin-bottom:26px !important;}";
                 const MARK = "data-wd-hide-injected";
+                const TITLE = "Een nieuwe Tempel op Ruigoord";
                 const LEAD =
                     "2000 × €10, dat moet lukken! Help mee een nieuwe Tempel te bouwen die het hele jaar door gebruikt kan worden.";
 
@@ -517,6 +524,20 @@
                     style.setAttribute(MARK, "");
                     style.textContent = CSS;
                     root.appendChild(style);
+                }
+                // Put the title as a header at the top of the widget card,
+                // just above the image (inside the shadow DOM).
+                function insertTitle(root) {
+                    const info = root.querySelector(".wd-part-donation-info");
+                    if (!info || root.querySelector("[data-wd-title]")) return;
+                    const h = document.createElement("div");
+                    h.setAttribute("data-wd-title", "");
+                    h.textContent = TITLE;
+                    h.style.cssText =
+                        "text-align:center;color:#2E2C96;font-weight:700;" +
+                        "font-size:clamp(1.4rem,5vw,2rem);line-height:1.2;" +
+                        "margin:0 0 18px;font-family:Roboto,system-ui,sans-serif;";
+                    info.parentNode.insertBefore(h, info);
                 }
                 // Put the lead sentence just above the "Select Amount" label,
                 // inside the widget's shadow DOM (below the image).
@@ -537,12 +558,14 @@
                     if (!node || !node.querySelectorAll) return;
                     if (node.shadowRoot) {
                         injectInto(node.shadowRoot);
+                        insertTitle(node.shadowRoot);
                         insertLead(node.shadowRoot);
                         scan(node.shadowRoot);
                     }
                     node.querySelectorAll("*").forEach(function (el) {
                         if (el.shadowRoot) {
                             injectInto(el.shadowRoot);
+                            insertTitle(el.shadowRoot);
                             insertLead(el.shadowRoot);
                             scan(el.shadowRoot);
                         }
