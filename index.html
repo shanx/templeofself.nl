@@ -508,11 +508,14 @@
         <!-- Hide currency selector + interval toggle inside the widget's shadow DOM -->
         <script>
             (function () {
+                // Double-class selectors (.x.x) raise specificity to (0,2,0)
+                // so these beat the widget's own (0,1,0) utility classes
+                // (e.g. wd:mt-5) regardless of stylesheet source order.
                 const CSS =
-                    ".wd-part-currency-group,.wd-part-interval-group{display:none !important;}" +
-                    ".wd-part-donation-image{margin-bottom:22px !important;}" +
-                    ".wd-part-donation-options-label{margin-top:56px !important;}" +
-                    ".wd-part-donation-options{margin-bottom:26px !important;}";
+                    ".wd-part-currency-group.wd-part-currency-group,.wd-part-interval-group.wd-part-interval-group{display:none !important;}" +
+                    ".wd-part-donation-image.wd-part-donation-image{margin-bottom:22px !important;}" +
+                    ".wd-part-donation-options-label.wd-part-donation-options-label{margin-top:56px !important;}" +
+                    ".wd-part-donation-options.wd-part-donation-options{margin-bottom:26px !important;}";
                 const MARK = "data-wd-hide-injected";
                 const TITLE = "Een nieuwe Tempel op Ruigoord";
                 const LEAD =
