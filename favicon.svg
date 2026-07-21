@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" rx="14" fill="#2E2C96"/>
+  <!-- dome -->
+  <path d="M32 12c-4 0-7 3.2-7 7.2h14c0-4-3-7.2-7-7.2z" fill="#32BF55"/>
+  <circle cx="32" cy="11" r="2.2" fill="#32BF55"/>
+  <!-- roof -->
+  <path d="M20 26 32 20l12 6z" fill="#fff"/>
+  <!-- body with pillars -->
+  <rect x="22" y="26" width="20" height="20" fill="#fff"/>
+  <rect x="25.5" y="29" width="3" height="17" fill="#2E2C96"/>
+  <rect x="30.5" y="29" width="3" height="17" fill="#2E2C96"/>
+  <rect x="35.5" y="29" width="3" height="17" fill="#2E2C96"/>
+  <!-- base -->
+  <rect x="18" y="46" width="28" height="4" rx="2" fill="#32BF55"/>
+</svg>
