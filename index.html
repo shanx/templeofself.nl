@@ -109,6 +109,41 @@
             /* Carousel — mobile first, CSS scroll-snap */
             .carousel {
                 margin: 28px -16px;
+                position: relative;
+            }
+            .arrow {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                z-index: 2;
+                width: 44px;
+                height: 44px;
+                border: 0;
+                border-radius: 50%;
+                background: rgba(46, 44, 150, 0.85);
+                color: #fff;
+                font-size: 22px;
+                line-height: 1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+                transition: background 0.2s, opacity 0.2s;
+                -webkit-tap-highlight-color: transparent;
+            }
+            .arrow:hover {
+                background: var(--primary);
+            }
+            .arrow[disabled] {
+                opacity: 0.35;
+                cursor: default;
+            }
+            .arrow.prev {
+                left: 20px;
+            }
+            .arrow.next {
+                right: 20px;
             }
             .carousel-track {
                 display: flex;
@@ -225,6 +260,22 @@
                 role="region"
                 aria-label="Foto's van de Temple of Self"
             >
+                <button
+                    class="arrow prev"
+                    id="carousel-prev"
+                    type="button"
+                    aria-label="Vorige foto"
+                >
+                    ‹
+                </button>
+                <button
+                    class="arrow next"
+                    id="carousel-next"
+                    type="button"
+                    aria-label="Volgende foto"
+                >
+                    ›
+                </button>
                 <div class="carousel-track" id="carousel-track">
                     <div class="slide">
                         <img
@@ -299,54 +350,88 @@
             type="text/javascript"
         ></script>
 
-        <!-- Carousel dots: sync active dot with scroll position -->
+        <!-- Carousel: dots via IntersectionObserver + prev/next arrows -->
         <script>
             (function () {
                 const track = document.getElementById("carousel-track");
                 const dotsWrap = document.getElementById("carousel-dots");
+                const prev = document.getElementById("carousel-prev");
+                const next = document.getElementById("carousel-next");
                 if (!track || !dotsWrap) return;
                 const slides = Array.from(track.querySelectorAll(".slide"));
+                let active = 0;
 
+                // Build dots.
                 slides.forEach(function (_, i) {
                     const b = document.createElement("button");
                     b.className = "dot";
+                    b.type = "button";
                     b.setAttribute("aria-label", "Ga naar foto " + (i + 1));
                     if (i === 0) b.setAttribute("aria-current", "true");
                     b.addEventListener("click", function () {
-                        slides[i].scrollIntoView({
-                            behavior: "smooth",
-                            inline: "center",
-                            block: "nearest",
-                        });
+                        goTo(i);
                     });
                     dotsWrap.appendChild(b);
                 });
                 const dots = Array.from(dotsWrap.children);
 
-                // Highlight the slide closest to the track centre.
-                let raf = null;
-                track.addEventListener("scroll", function () {
-                    if (raf) return;
-                    raf = requestAnimationFrame(function () {
-                        raf = null;
-                        const mid = track.scrollLeft + track.clientWidth / 2;
-                        let best = 0,
-                            bestDist = Infinity;
+                function setActive(i) {
+                    active = i;
+                    dots.forEach(function (d, j) {
+                        if (j === i) d.setAttribute("aria-current", "true");
+                        else d.removeAttribute("aria-current");
+                    });
+                    if (prev) prev.disabled = i <= 0;
+                    if (next) next.disabled = i >= slides.length - 1;
+                }
+
+                function goTo(i) {
+                    i = Math.max(0, Math.min(slides.length - 1, i));
+                    const s = slides[i];
+                    // Scroll the track so slide i is centred (no page scroll).
+                    track.scrollTo({
+                        left:
+                            s.offsetLeft -
+                            (track.clientWidth - s.offsetWidth) / 2,
+                        behavior: "smooth",
+                    });
+                    setActive(i);
+                }
+
+                if (prev)
+                    prev.addEventListener("click", function () {
+                        goTo(active - 1);
+                    });
+                if (next)
+                    next.addEventListener("click", function () {
+                        goTo(active + 1);
+                    });
+
+                // Track which slide is most visible → drives the dots.
+                const ratios = new Map();
+                const io = new IntersectionObserver(
+                    function (entries) {
+                        entries.forEach(function (e) {
+                            ratios.set(e.target, e.intersectionRatio);
+                        });
+                        let best = active,
+                            bestR = -1;
                         slides.forEach(function (s, i) {
-                            const c = s.offsetLeft + s.offsetWidth / 2;
-                            const d = Math.abs(c - mid);
-                            if (d < bestDist) {
-                                bestDist = d;
+                            const r = ratios.get(s) || 0;
+                            if (r > bestR) {
+                                bestR = r;
                                 best = i;
                             }
                         });
-                        dots.forEach(function (d, i) {
-                            if (i === best)
-                                d.setAttribute("aria-current", "true");
-                            else d.removeAttribute("aria-current");
-                        });
-                    });
+                        if (best !== active) setActive(best);
+                    },
+                    { root: track, threshold: [0.25, 0.5, 0.75, 1] }
+                );
+                slides.forEach(function (s) {
+                    io.observe(s);
                 });
+
+                setActive(0);
             })();
         </script>
 
@@ -354,7 +439,9 @@
         <script>
             (function () {
                 const CSS =
-                    ".wd-part-currency-group,.wd-part-interval-group{display:none !important;}";
+                    ".wd-part-currency-group,.wd-part-interval-group{display:none !important;}" +
+                    ".wd-part-donation-image{margin-bottom:22px !important;}" +
+                    ".wd-part-donation-options-label{margin-top:8px !important;}";
                 const MARK = "data-wd-hide-injected";
 
                 function injectInto(root) {
