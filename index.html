@@ -172,6 +172,55 @@
                 object-fit: cover;
                 display: block;
             }
+            /* Video slide: click-to-play facade */
+            .slide.video {
+                background: #000;
+            }
+            .video-facade {
+                width: 100%;
+                height: 100%;
+                padding: 0;
+                border: 0;
+                margin: 0;
+                position: relative;
+                cursor: pointer;
+                background: #000;
+                display: block;
+            }
+            .video-facade img {
+                opacity: 0.9;
+                transition: opacity 0.2s;
+            }
+            .video-facade:hover img {
+                opacity: 1;
+            }
+            .play-btn {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 68px;
+                height: 68px;
+                border-radius: 50%;
+                background: rgba(46, 44, 150, 0.9);
+                box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+            }
+            .play-btn::after {
+                content: "";
+                position: absolute;
+                top: 50%;
+                left: 54%;
+                transform: translate(-50%, -50%);
+                border-style: solid;
+                border-width: 12px 0 12px 20px;
+                border-color: transparent transparent transparent #fff;
+            }
+            .slide.video iframe {
+                width: 100%;
+                height: 100%;
+                border: 0;
+                display: block;
+            }
             .dots {
                 display: flex;
                 justify-content: center;
@@ -218,53 +267,42 @@
     </head>
     <body>
         <div class="page">
-            <div class="hero">
-                <img
-                    src="https://whydonate.com/cdn-cgi/imagedelivery/_0vgnXOEIHPwLg2E52a7gg/production/fundraiser_header/b05782b4964c4a1c/public"
-                    alt="De Temple of Self op Ruigoord"
-                    fetchpriority="high"
-                />
-            </div>
-
             <h1>Een nieuwe Tempel op Ruigoord</h1>
             <p class="lead">
                 2000&nbsp;×&nbsp;€10, dat moet lukken! Help mee een nieuwe Tempel
                 te bouwen die het hele jaar door gebruikt kan worden.
             </p>
 
-            <div class="intro">
-                <h2>Een nieuwe Tempel voor het hele jaar</h2>
-                <p>
-                    Op Ruigoord staat al 10 jaar de Temple of Self. Dit open
-                    houten gebouw wordt met name gebruikt als een plek voor
-                    verstilling, verwondering en verbinding tijdens Landjuweel,
-                    het jaarlijkse zomerfestival en hoogtepunt in het dorp. We
-                    willen de huidige structuur gaan vervangen voor een bouw- en
-                    kunstwerk dat het hele jaar door gebruikt kan worden en nog
-                    minimaal 25 jaar weer en wind kan doorstaan.
-                </p>
-
-                <h2>De Temple of Self</h2>
-                <p>
-                    ‘De Tempel’ is een plek voor de spirituele dingen in het
-                    dorp. Een stilteplek waar mensen zich even kunnen
-                    terugtrekken — een thuis voor reflectie, persoonlijke groei
-                    en ontmoeting. Van meditatie en yoga tot kunst en dans, met
-                    een gezonde dosis glitter.
-                </p>
+            <!-- Donation form — top of the page -->
+            <div class="widget-wrap">
+                <div
+                    id="share-widget-new-temple-for-ruigoord"
+                    class="share-widget"
+                    data-slug="new-temple-for-ruigoord"
+                    data-lang="en"
+                    data-primary-color="#32BF55"
+                    data-secondary-color="#2E2C96"
+                    data-font-family="Roboto"
+                    data-button-radius="27"
+                    data-card-radius="21"
+                    data-donation-amount-size="16"
+                    data-button-text-size="20"
+                    data-card="show"
+                    data-form_mode="donation-form+image"
+                ></div>
             </div>
 
-            <!-- Image carousel -->
+            <!-- Media carousel: video + photos -->
             <div
                 class="carousel"
                 role="region"
-                aria-label="Foto's van de Temple of Self"
+                aria-label="Foto's en video van de Temple of Self"
             >
                 <button
                     class="arrow prev"
                     id="carousel-prev"
                     type="button"
-                    aria-label="Vorige foto"
+                    aria-label="Vorige"
                 >
                     ‹
                 </button>
@@ -272,11 +310,25 @@
                     class="arrow next"
                     id="carousel-next"
                     type="button"
-                    aria-label="Volgende foto"
+                    aria-label="Volgende"
                 >
                     ›
                 </button>
                 <div class="carousel-track" id="carousel-track">
+                    <div class="slide video" data-youtube="j-xWVKpoL-8">
+                        <button
+                            class="video-facade"
+                            type="button"
+                            aria-label="Video afspelen"
+                        >
+                            <img
+                                loading="lazy"
+                                src="https://img.youtube.com/vi/j-xWVKpoL-8/maxresdefault.jpg"
+                                alt="Video over de Temple of Self op Ruigoord"
+                            />
+                            <span class="play-btn" aria-hidden="true"></span>
+                        </button>
+                    </div>
                     <div class="slide">
                         <img
                             loading="lazy"
@@ -317,6 +369,26 @@
             </div>
 
             <div class="intro">
+                <h2>Een nieuwe Tempel voor het hele jaar</h2>
+                <p>
+                    Op Ruigoord staat al 10 jaar de Temple of Self. Dit open
+                    houten gebouw wordt met name gebruikt als een plek voor
+                    verstilling, verwondering en verbinding tijdens Landjuweel,
+                    het jaarlijkse zomerfestival en hoogtepunt in het dorp. We
+                    willen de huidige structuur gaan vervangen voor een bouw- en
+                    kunstwerk dat het hele jaar door gebruikt kan worden en nog
+                    minimaal 25 jaar weer en wind kan doorstaan.
+                </p>
+
+                <h2>De Temple of Self</h2>
+                <p>
+                    ‘De Tempel’ is een plek voor de spirituele dingen in het
+                    dorp. Een stilteplek waar mensen zich even kunnen
+                    terugtrekken — een thuis voor reflectie, persoonlijke groei
+                    en ontmoeting. Van meditatie en yoga tot kunst en dans, met
+                    een gezonde dosis glitter.
+                </p>
+
                 <h2>Doneer voor een mooi startbedrag</h2>
                 <p>
                     In totaal hebben we naar schatting €500.000 nodig. Met €20.000
@@ -324,24 +396,6 @@
                     festival-vierders en Tempel-bewaarders die een tientje of meer
                     doneren, dat moet lukken! Dankjewel voor je bijdrage.
                 </p>
-            </div>
-
-            <div class="widget-wrap">
-                <div
-                    id="share-widget-new-temple-for-ruigoord"
-                    class="share-widget"
-                    data-slug="new-temple-for-ruigoord"
-                    data-lang="en"
-                    data-primary-color="#32BF55"
-                    data-secondary-color="#2E2C96"
-                    data-font-family="Roboto"
-                    data-button-radius="27"
-                    data-card-radius="21"
-                    data-donation-amount-size="16"
-                    data-button-text-size="20"
-                    data-card="show"
-                    data-form_mode="donation-form+image"
-                ></div>
             </div>
         </div>
 
@@ -360,6 +414,25 @@
                 if (!track || !dotsWrap) return;
                 const slides = Array.from(track.querySelectorAll(".slide"));
                 let active = 0;
+
+                // Video slide: swap facade for an autoplaying iframe on click.
+                const vSlide = track.querySelector(".slide.video");
+                if (vSlide) {
+                    const facade = vSlide.querySelector(".video-facade");
+                    facade.addEventListener("click", function () {
+                        const id = vSlide.getAttribute("data-youtube");
+                        const f = document.createElement("iframe");
+                        f.src =
+                            "https://www.youtube-nocookie.com/embed/" +
+                            id +
+                            "?autoplay=1&rel=0";
+                        f.allow =
+                            "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture";
+                        f.allowFullscreen = true;
+                        f.title = "Video Temple of Self";
+                        vSlide.replaceChild(f, facade);
+                    });
+                }
 
                 // Build dots.
                 slides.forEach(function (_, i) {
@@ -441,7 +514,8 @@
                 const CSS =
                     ".wd-part-currency-group,.wd-part-interval-group{display:none !important;}" +
                     ".wd-part-donation-image{margin-bottom:22px !important;}" +
-                    ".wd-part-donation-options-label{margin-top:8px !important;}";
+                    ".wd-part-donation-options-label{margin-top:8px !important;}" +
+                    ".wd-part-donation-options{margin-bottom:26px !important;}";
                 const MARK = "data-wd-hide-injected";
 
                 function injectInto(root) {
