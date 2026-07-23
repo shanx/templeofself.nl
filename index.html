@@ -65,7 +65,11 @@
                 padding: 0;
                 background: var(--bg);
                 color: var(--ink);
-                font-family: Roboto, system-ui, -apple-system, sans-serif;
+                font-family:
+                    Roboto,
+                    system-ui,
+                    -apple-system,
+                    sans-serif;
                 line-height: 1.6;
                 -webkit-text-size-adjust: 100%;
             }
@@ -120,7 +124,9 @@
                 font-weight: 600;
                 text-align: center;
                 text-decoration: none;
-                transition: background 0.2s, transform 0.1s;
+                transition:
+                    background 0.2s,
+                    transform 0.1s;
             }
             .cf-link:hover {
                 background: #2aa549;
@@ -152,7 +158,9 @@
                 justify-content: center;
                 cursor: pointer;
                 box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-                transition: background 0.2s, opacity 0.2s;
+                transition:
+                    background 0.2s,
+                    opacity 0.2s;
                 -webkit-tap-highlight-color: transparent;
             }
             .arrow:hover {
@@ -258,7 +266,9 @@
                 padding: 0;
                 background: #cfcfd6;
                 cursor: pointer;
-                transition: background 0.2s, transform 0.2s;
+                transition:
+                    background 0.2s,
+                    transform 0.2s;
             }
             .dot[aria-current="true"] {
                 background: var(--primary);
@@ -408,12 +418,41 @@
                     een gezonde dosis glitter.
                 </p>
 
-                <h2>Doneer voor een mooi startbedrag</h2>
+                <h2>Een wonderlijke geschiedenis</h2>
                 <p>
-                    In totaal hebben we naar schatting €500.000 nodig. Met €20.000
-                    kunnen we de fundering leggen — ons eerste streefbedrag. 2000
-                    festival-vierders en Tempel-bewaarders die een tientje of meer
-                    doneren, dat moet lukken! Dankjewel voor je bijdrage.
+                    Deze Tempel is gebouwd in 2016 voor Nowhere Festival in
+                    Spanje. Daarna kwam de constructie mee terug naar Nederland
+                    en vond hier op wonderlijke wijze een thuis. Zes jaar eerder
+                    had David Frank — Ruigoorder van het eerste uur — al een
+                    stiltecentrum ontworpen, met bijna dezelfde maat en vorm. Hij
+                    had ook al een vergunning geregeld en het gebouw ingetekend in
+                    het bestemmingsplan, precies op deze plek.
+                </p>
+                <p>
+                    Doordat hij ziek werd is de bouw ervan nooit gerealiseerd.
+                    Maar de Tempel kon door dit pure toeval (of een kosmisch
+                    lek…?) blijven staan. En hierdoor kunnen we nu ook een nieuwe
+                    Tempel bouwen, want het huidige bouwwerk is na 10 jaar weer en
+                    wind aan vervanging toe.
+                </p>
+
+                <h2>Sparen voor de bouw</h2>
+                <p>
+                    Met de opbrengsten van afgelopen Landjuweel hebben we met een
+                    architect een nieuw ontwerp gemaakt. Dit jaar sparen we voor
+                    een mooi startbedrag voor de bouw. Er komt een Tempel die we
+                    het hele jaar door kunnen gebruiken, die we kunnen afsluiten en
+                    isoleren, en die nog zeker 25 jaar mee kan.
+                </p>
+                <p>
+                    In totaal hebben we naar schatting een paar ton nodig. Met
+                    €20.000 kunnen we de fundering leggen — ons eerste
+                    streefbedrag. 2000 festival-vierders en Tempel-bewaarders die
+                    een tientje of meer doneren, dat moet lukken!
+                </p>
+                <p>
+                    Word jij onderdeel van dit nieuwe hoofdstuk? Dankjewel voor je
+                    bijdrage.
                 </p>
             </div>
 
@@ -525,7 +564,7 @@
                         });
                         if (best !== active) setActive(best);
                     },
-                    { root: track, threshold: [0.25, 0.5, 0.75, 1] }
+                    { root: track, threshold: [0.25, 0.5, 0.75, 1] },
                 );
                 slides.forEach(function (s) {
                     io.observe(s);
@@ -556,7 +595,8 @@
                     "2000 × €10, dat moet lukken! Help mee een nieuwe Tempel te bouwen die het hele jaar door gebruikt kan worden.";
 
                 function injectInto(root) {
-                    if (!root || root.querySelector("style[" + MARK + "]")) return;
+                    if (!root || root.querySelector("style[" + MARK + "]"))
+                        return;
                     const style = document.createElement("style");
                     style.setAttribute(MARK, "");
                     style.textContent = CSS;
@@ -580,7 +620,7 @@
                 // inside the widget's shadow DOM (below the image).
                 function insertLead(root) {
                     const label = root.querySelector(
-                        ".wd-part-donation-options-label"
+                        ".wd-part-donation-options-label",
                     );
                     if (!label || root.querySelector("[data-wd-lead]")) return;
                     const p = document.createElement("p");
@@ -622,6 +662,5 @@
                 }, 15000);
             })();
         </script>
-
     </body>
 </html>
