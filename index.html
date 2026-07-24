@@ -135,6 +135,136 @@
                 transform: translateY(1px);
             }
 
+            /* Thank-you banner (post-donation) */
+            .thanks {
+                background: linear-gradient(135deg, #2e2c96, #3b39b8);
+                border-radius: var(--card-radius);
+                padding: 22px 20px;
+                margin: 8px 0 24px;
+                color: #fff;
+            }
+            .thanks h2 {
+                margin: 0 0 8px;
+                font-size: 1.35rem;
+                color: #fff;
+            }
+            .thanks p {
+                margin: 0 0 10px;
+                color: #eceafc;
+            }
+            .thanks-cta {
+                display: inline-block;
+                margin-top: 6px;
+                padding: 11px 20px;
+                border-radius: 27px;
+                background: var(--primary);
+                color: #fff;
+                font-weight: 600;
+                text-decoration: none;
+            }
+
+            /* Contribute-more section + form */
+            .contribute {
+                margin: 40px 0 0;
+                padding: 24px 20px;
+                background: #202027;
+                border: 1px solid #33333c;
+                border-radius: var(--card-radius);
+            }
+            .contribute h2 {
+                margin: 0 0 6px;
+                color: var(--primary);
+                font-size: 1.3rem;
+            }
+            .contribute-intro {
+                margin: 0 0 18px;
+                color: var(--ink);
+            }
+            .contribute-form {
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+            }
+            .field {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+                border: 0;
+                padding: 0;
+                margin: 0;
+            }
+            .field > span,
+            .field legend {
+                font-weight: 600;
+                color: var(--ink);
+                font-size: 0.95rem;
+                padding: 0;
+            }
+            .field input[type="text"],
+            .field input[type="email"],
+            .field textarea {
+                width: 100%;
+                padding: 12px 14px;
+                border-radius: 12px;
+                border: 1px solid #3d3d47;
+                background: #17171b;
+                color: var(--ink);
+                font: inherit;
+            }
+            .field input:focus,
+            .field textarea:focus {
+                outline: 2px solid var(--primary);
+                outline-offset: 1px;
+                border-color: var(--primary);
+            }
+            .field textarea {
+                resize: vertical;
+            }
+            .check {
+                display: flex;
+                align-items: center;
+                gap: 9px;
+                font-weight: 400;
+                color: var(--ink);
+                margin-top: 8px;
+                cursor: pointer;
+            }
+            .check input {
+                width: 18px;
+                height: 18px;
+                accent-color: var(--primary);
+            }
+            .contribute-submit {
+                align-self: flex-start;
+                padding: 13px 26px;
+                border: 0;
+                border-radius: 27px;
+                background: var(--primary);
+                color: #fff;
+                font-weight: 600;
+                font-size: 1rem;
+                cursor: pointer;
+                transition: background 0.2s;
+            }
+            .contribute-submit:hover {
+                background: #2aa549;
+            }
+            .contribute-submit:disabled {
+                opacity: 0.6;
+                cursor: default;
+            }
+            .form-status {
+                margin: 0;
+                font-weight: 600;
+                min-height: 1.2em;
+            }
+            .form-status.ok {
+                color: var(--primary);
+            }
+            .form-status.err {
+                color: #ff6b6b;
+            }
+
             /* Carousel — mobile first, CSS scroll-snap */
             .carousel {
                 margin: 28px -16px;
@@ -302,6 +432,21 @@
         <div class="page">
             <h1 class="sr-only">Een nieuwe Tempel op Ruigoord</h1>
 
+            <!-- Thank-you banner: shown by JS after returning from a donation -->
+            <div id="thanks" class="thanks" hidden>
+                <h2>Dankjewel — je bouwt mee! ✨</h2>
+                <p>
+                    Jouw bijdrage brengt de nieuwe Tempel op Ruigoord dichterbij.
+                    Samen leggen we, steen voor steen, een mooi startbedrag neer.
+                </p>
+                <p>
+                    Er is méér nodig dan geld alleen. Heb je materialen,
+                    vakmanschap, een goed idee of tijd? Laat het hieronder weten en
+                    bouw mee aan dit nieuwe hoofdstuk.
+                </p>
+                <a class="thanks-cta" href="#bijdragen">Ik wil meer bijdragen →</a>
+            </div>
+
             <!-- Donation form — top of the page -->
             <div class="widget-wrap">
                 <div
@@ -446,8 +591,8 @@
                 </p>
                 <p>
                     In totaal hebben we naar schatting een paar ton nodig. Met
-                    €20.000 kunnen we de fundering leggen — ons eerste
-                    streefbedrag. 2000 festival-vierders en Tempel-bewaarders die
+                    €5.000 leggen we samen een mooi startbedrag neer — ons eerste
+                    streefbedrag. 500 festival-vierders en Tempel-bewaarders die
                     een tientje of meer doneren, dat moet lukken!
                 </p>
                 <p>
@@ -465,7 +610,99 @@
                 rel="noopener"
                 >Bekijk de volledige crowdfunding op Whydonate →</a
             >
+
+            <!-- Network activation: contribute more than money -->
+            <section class="contribute" id="bijdragen">
+                <h2>Doe meer dan doneren</h2>
+                <p class="contribute-intro">
+                    We bouwen de nieuwe Tempel zoveel mogelijk samen. Heb je
+                    materialen, vakmanschap, een goed idee of tijd? Laat het weten
+                    — dan nemen we contact met je op.
+                </p>
+
+                <form id="contribute-form" class="contribute-form">
+                    <label class="field">
+                        <span>Naam</span>
+                        <input type="text" name="naam" required autocomplete="name" />
+                    </label>
+                    <label class="field">
+                        <span>E-mail</span>
+                        <input
+                            type="email"
+                            name="email"
+                            required
+                            autocomplete="email"
+                        />
+                    </label>
+
+                    <fieldset class="field">
+                        <legend>Hoe wil je bijdragen?</legend>
+                        <label class="check"
+                            ><input
+                                type="checkbox"
+                                name="bijdrage"
+                                value="Materialen"
+                            />
+                            Materialen</label
+                        >
+                        <label class="check"
+                            ><input
+                                type="checkbox"
+                                name="bijdrage"
+                                value="Vakmanschap / expertise"
+                            />
+                            Vakmanschap / expertise</label
+                        >
+                        <label class="check"
+                            ><input
+                                type="checkbox"
+                                name="bijdrage"
+                                value="Meedenken / ideeën"
+                            />
+                            Meedenken / ideeën</label
+                        >
+                        <label class="check"
+                            ><input
+                                type="checkbox"
+                                name="bijdrage"
+                                value="Handen / tijd"
+                            />
+                            Handen / tijd</label
+                        >
+                        <label class="check"
+                            ><input
+                                type="checkbox"
+                                name="bijdrage"
+                                value="Anders"
+                            />
+                            Anders</label
+                        >
+                    </fieldset>
+
+                    <label class="field">
+                        <span>Toelichting</span>
+                        <textarea
+                            name="toelichting"
+                            rows="4"
+                            placeholder="Vertel kort wat je kunt of wilt bijdragen…"
+                        ></textarea>
+                    </label>
+
+                    <button type="submit" class="contribute-submit">
+                        Verstuur
+                    </button>
+                    <p class="form-status" id="form-status" role="status"></p>
+                </form>
+            </section>
         </div>
+
+        <!-- Hidden target so the form POST doesn't navigate away (CORS-free) -->
+        <iframe
+            name="contribute-sink"
+            id="contribute-sink"
+            style="display: none"
+            title="verzenden"
+        ></iframe>
 
         <script
             src="https://plugin.whydonate.com/wp_styling.js"
@@ -662,6 +899,83 @@
                 setTimeout(function () {
                     clearInterval(iv);
                 }, 15000);
+            })();
+        </script>
+
+        <!-- Post-donation thank-you + contribution form -->
+        <script>
+            (function () {
+                // ---- Paste your deployed Google Apps Script web-app URL here.
+                // Until it's set, the form shows a friendly "coming soon" note.
+                var CONTRIBUTE_ENDPOINT = "";
+
+                // 1) Thank-you banner: the WhyDonate widget returns to this same
+                // page after payment with ?orderId= (Stripe also adds
+                // redirect_status=succeeded). Show a clear thank-you when so.
+                var qs = new URLSearchParams(window.location.search);
+                var donated =
+                    qs.has("orderId") ||
+                    qs.get("redirect_status") === "succeeded" ||
+                    qs.has("payment_intent");
+                if (donated) {
+                    var t = document.getElementById("thanks");
+                    if (t) {
+                        t.hidden = false;
+                        t.scrollIntoView({ block: "start" });
+                    }
+                }
+
+                // 2) Contribution form → POST to Apps Script via hidden iframe.
+                var form = document.getElementById("contribute-form");
+                var statusEl = document.getElementById("form-status");
+                var sink = document.getElementById("contribute-sink");
+                if (!form) return;
+
+                if (!CONTRIBUTE_ENDPOINT) {
+                    form.addEventListener("submit", function (e) {
+                        e.preventDefault();
+                        statusEl.className = "form-status err";
+                        statusEl.textContent =
+                            "Het formulier is nog niet actief. Probeer het later opnieuw.";
+                    });
+                    return;
+                }
+
+                form.action = CONTRIBUTE_ENDPOINT;
+                form.method = "POST";
+                form.target = "contribute-sink";
+
+                var submitted = false;
+                form.addEventListener("submit", function (e) {
+                    // Require at least one contribution type.
+                    var checked = form.querySelectorAll(
+                        'input[name="bijdrage"]:checked'
+                    ).length;
+                    if (!checked) {
+                        e.preventDefault();
+                        statusEl.className = "form-status err";
+                        statusEl.textContent =
+                            "Kies minstens één manier waarop je wilt bijdragen.";
+                        return;
+                    }
+                    var btn = form.querySelector(".contribute-submit");
+                    if (btn) btn.disabled = true;
+                    submitted = true;
+                    statusEl.className = "form-status";
+                    statusEl.textContent = "Versturen…";
+                });
+
+                // The hidden iframe fires load when the POST completes.
+                sink.addEventListener("load", function () {
+                    if (!submitted) return;
+                    statusEl.className = "form-status ok";
+                    statusEl.textContent =
+                        "Dankjewel! We hebben je bericht ontvangen en nemen contact op.";
+                    form.reset();
+                    var btn = form.querySelector(".contribute-submit");
+                    if (btn) btn.disabled = false;
+                    submitted = false;
+                });
             })();
         </script>
     </body>
