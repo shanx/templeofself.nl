@@ -623,7 +623,16 @@
                 <form id="contribute-form" class="contribute-form">
                     <label class="field">
                         <span>Naam</span>
-                        <input type="text" name="naam" required autocomplete="name" />
+                        <input
+                            type="text"
+                            name="naam"
+                            required
+                            autocomplete="name"
+                            data-form-type="other"
+                            data-1p-ignore
+                            data-lpignore="true"
+                            data-bwignore
+                        />
                     </label>
                     <label class="field">
                         <span>E-mail</span>
@@ -632,6 +641,10 @@
                             name="email"
                             required
                             autocomplete="email"
+                            data-form-type="other"
+                            data-1p-ignore
+                            data-lpignore="true"
+                            data-bwignore
                         />
                     </label>
 
