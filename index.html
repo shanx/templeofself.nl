@@ -335,6 +335,9 @@
             }
             .slide:not(.video) img {
                 cursor: zoom-in;
+                /* Show the whole image (text stays visible) — no cropping. */
+                object-fit: contain;
+                background: #17171b;
             }
 
             /* Lightbox */
