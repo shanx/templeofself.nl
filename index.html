@@ -308,6 +308,7 @@
             }
             .carousel-track {
                 display: flex;
+                align-items: center;
                 gap: 10px;
                 overflow-x: auto;
                 scroll-snap-type: x mandatory;
@@ -324,20 +325,24 @@
                 scroll-snap-align: center;
                 border-radius: var(--card-radius);
                 overflow: hidden;
-                background: #e4e4e8;
-                aspect-ratio: 4 / 3;
             }
+            /* Photos size to their own aspect — no fixed box, so no
+               letterbox frame and the in-image text stays visible. */
             .slide img {
                 width: 100%;
-                height: 100%;
-                object-fit: cover;
+                height: auto;
                 display: block;
             }
             .slide:not(.video) img {
                 cursor: zoom-in;
-                /* Show the whole image (text stays visible) — no cropping. */
-                object-fit: contain;
-                background: #17171b;
+            }
+            /* The video slide keeps a fixed 16:9 box for the thumb/iframe. */
+            .slide.video {
+                aspect-ratio: 16 / 9;
+            }
+            .slide.video img {
+                height: 100%;
+                object-fit: cover;
             }
 
             /* Lightbox */
@@ -500,7 +505,6 @@
             @media (min-width: 560px) {
                 .slide {
                     flex-basis: 60%;
-                    aspect-ratio: 16 / 10;
                 }
             }
         </style>
@@ -687,6 +691,7 @@
                 </p>
             </div>
 
+            <!-- TIJDELIJK UIT — verwijder deze comment-regels om weer aan te zetten:
             <a
                 class="cf-link"
                 href="https://whydonate.com/fundraising/new-temple-for-ruigoord"
@@ -694,6 +699,7 @@
                 rel="noopener"
                 >Bekijk de volledige crowdfunding op Whydonate →</a
             >
+            -->
 
             <!-- Network activation: contribute more than money -->
             <section class="contribute" id="bijdragen">
