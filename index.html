@@ -834,11 +834,11 @@
                 // (e.g. wd:mt-5) regardless of stylesheet source order.
                 const CSS =
                     ".wd-part-currency-group.wd-part-currency-group,.wd-part-interval-group.wd-part-interval-group{display:none !important;}" +
-                    ".wd-part-donation-image.wd-part-donation-image{margin-bottom:22px !important;}" +
-                    // In the side-by-side layout the image class carries both
-                    // w-full and w-[28%]; w-full wins and pushes the funding
-                    // block outside the card. Force 28% only on that variant.
-                    '.wd-part-donation-image[class*="28%"]{width:28% !important;flex:0 0 28% !important;}' +
+                    ".wd-part-donation-image.wd-part-donation-image{margin-bottom:18px !important;}" +
+                    // Stack the card top vertically: big full-width image, our
+                    // counter below it (instead of side-by-side).
+                    ".wd-part-donation-info.wd-part-donation-info{flex-direction:column !important;}" +
+                    '.wd-part-donation-image[class*="28%"]{width:100% !important;flex:0 0 auto !important;}' +
                     ".wd-part-donation-options-label.wd-part-donation-options-label{display:block !important;margin-top:56px !important;}" +
                     ".wd-part-donation-options.wd-part-donation-options{margin-bottom:26px !important;}" +
                     // Hide the widget's own counter (online-only) — we inject our
