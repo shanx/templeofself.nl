@@ -135,6 +135,53 @@
                 transform: translateY(1px);
             }
 
+            /* Own donation counter */
+            .raised {
+                max-width: 34em;
+                margin: 4px auto 22px;
+            }
+            .raised-top {
+                display: flex;
+                align-items: baseline;
+                justify-content: center;
+                gap: 8px;
+                flex-wrap: wrap;
+            }
+            .raised-amount {
+                font-size: 1.8rem;
+                font-weight: 700;
+                color: #fff;
+            }
+            .raised-target {
+                color: var(--muted);
+            }
+            .raised-bar {
+                height: 10px;
+                border-radius: 6px;
+                background: #2f2f38;
+                overflow: hidden;
+                margin: 12px 0 6px;
+            }
+            .raised-fill {
+                display: block;
+                height: 100%;
+                width: 0;
+                background: var(--primary);
+                border-radius: 6px;
+                transition: width 0.7s ease;
+            }
+            @media (prefers-reduced-motion: reduce) {
+                .raised-fill {
+                    transition: none;
+                }
+            }
+            .raised-count {
+                text-align: center;
+                color: var(--muted);
+                font-size: 0.92rem;
+                min-height: 1.1em;
+            }
+
             /* Thank-you banner (post-donation) */
             .thanks {
                 background: linear-gradient(135deg, #2e2c96, #3b39b8);
@@ -445,6 +492,27 @@
                     bouw mee aan dit nieuwe hoofdstuk.
                 </p>
                 <a class="thanks-cta" href="#bijdragen">Ik wil meer bijdragen →</a>
+            </div>
+
+            <!-- Own donation counter (includes offline donations, which the
+                 WhyDonate widget omits). Filled + revealed by JS. -->
+            <div class="raised" id="raised" hidden>
+                <div class="raised-top">
+                    <span class="raised-amount" id="raised-amount"></span>
+                    <span class="raised-target" id="raised-target"></span>
+                </div>
+                <div
+                    class="raised-bar"
+                    id="raised-bar"
+                    role="progressbar"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    aria-valuenow="0"
+                    aria-label="Voortgang inzameling"
+                >
+                    <span class="raised-fill" id="raised-fill"></span>
+                </div>
+                <div class="raised-count" id="raised-count"></div>
             </div>
 
             <!-- Donation form — top of the page -->
@@ -844,7 +912,7 @@
                 const MARK = "data-wd-hide-injected";
                 const TITLE = "Een nieuwe Tempel op Ruigoord";
                 const LEAD =
-                    "2000 × €10, dat moet lukken! Help mee een nieuwe Tempel te bouwen die het hele jaar door gebruikt kan worden.";
+                    "500 × €10, dat moet lukken! Help mee een nieuwe Tempel te bouwen die het hele jaar door gebruikt kan worden.";
 
                 function injectInto(root) {
                     if (!root || root.querySelector("style[" + MARK + "]"))
@@ -989,6 +1057,74 @@
                     if (btn) btn.disabled = false;
                     submitted = false;
                 });
+            })();
+        </script>
+
+        <!-- Own donation counter: total = online + offline (widget omits offline) -->
+        <script>
+            (function () {
+                var URL_ =
+                    "https://fundraiser.whydonate.dev/fundraiser/get" +
+                    "?slug=new-temple-for-ruigoord&language=nl";
+
+                function nl(n) {
+                    return Number(n).toLocaleString("nl-NL");
+                }
+
+                fetch(URL_)
+                    .then(function (r) {
+                        if (!r.ok) throw new Error("http " + r.status);
+                        return r.json();
+                    })
+                    .then(function (json) {
+                        var d = json && json.data && json.data.result;
+                        if (!d || d.is_draft === true || d.is_opened === false)
+                            return;
+                        var don = d.donation;
+                        if (!don) return;
+
+                        var sym = d.currency_symbol || "€";
+                        var online = Number(don.amount) || 0;
+                        var offline =
+                            (don.offline_donation &&
+                                Number(don.offline_donation.amount)) ||
+                            0;
+                        var total = online + offline;
+                        var target = Number(d.amount_target) || 0;
+                        var count = Number(don.count) || 0;
+
+                        var el = document.getElementById("raised");
+                        document.getElementById("raised-amount").textContent =
+                            sym + " " + nl(total);
+
+                        if (target > 0) {
+                            document.getElementById(
+                                "raised-target"
+                            ).textContent = "opgehaald van " + sym + " " + nl(target);
+                            var pct = Math.min(
+                                100,
+                                Math.max(total > 0 ? 2 : 0, (total / target) * 100)
+                            );
+                            document.getElementById("raised-fill").style.width =
+                                pct + "%";
+                            document
+                                .getElementById("raised-bar")
+                                .setAttribute("aria-valuenow", Math.round(pct));
+                        } else {
+                            // No target: hide the bar, keep the amount.
+                            document.getElementById("raised-bar").hidden = true;
+                        }
+
+                        if (count > 0) {
+                            document.getElementById("raised-count").textContent =
+                                count === 1 ? "1 donatie" : nl(count) + " donaties";
+                        }
+
+                        el.hidden = false;
+                    })
+                    .catch(function () {
+                        /* fail silently: counter stays hidden, page stays usable */
+                    });
             })();
         </script>
     </body>
