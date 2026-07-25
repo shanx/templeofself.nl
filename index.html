@@ -333,6 +333,50 @@
                 object-fit: cover;
                 display: block;
             }
+            .slide:not(.video) img {
+                cursor: zoom-in;
+            }
+
+            /* Lightbox */
+            .lightbox {
+                position: fixed;
+                inset: 0;
+                z-index: 1000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 24px;
+                background: rgba(0, 0, 0, 0.92);
+            }
+            .lightbox[hidden] {
+                display: none;
+            }
+            .lightbox img {
+                max-width: 100%;
+                max-height: 100%;
+                width: auto;
+                height: auto;
+                border-radius: 8px;
+                box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
+            }
+            .lightbox-close {
+                position: absolute;
+                top: 14px;
+                right: 18px;
+                width: 44px;
+                height: 44px;
+                border: 0;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.15);
+                color: #fff;
+                font-size: 28px;
+                line-height: 1;
+                cursor: pointer;
+                -webkit-tap-highlight-color: transparent;
+            }
+            .lightbox-close:hover {
+                background: rgba(255, 255, 255, 0.28);
+            }
             /* Video slide: click-to-play facade */
             .slide.video {
                 background: #000;
@@ -717,6 +761,26 @@
             title="verzenden"
         ></iframe>
 
+        <!-- Lightbox: enlarged photo over the rest of the content -->
+        <div
+            id="lightbox"
+            class="lightbox"
+            hidden
+            role="dialog"
+            aria-modal="true"
+            aria-label="Vergrote foto"
+        >
+            <button
+                type="button"
+                class="lightbox-close"
+                id="lightbox-close"
+                aria-label="Sluiten"
+            >
+                ×
+            </button>
+            <img id="lightbox-img" alt="" />
+        </div>
+
         <script
             src="https://plugin.whydonate.com/wp_styling.js"
             type="text/javascript"
@@ -823,6 +887,47 @@
                 });
 
                 setActive(0);
+            })();
+        </script>
+
+        <!-- Lightbox: click a carousel photo to enlarge it over the content -->
+        <script>
+            (function () {
+                var box = document.getElementById("lightbox");
+                var big = document.getElementById("lightbox-img");
+                var closeBtn = document.getElementById("lightbox-close");
+                var track = document.getElementById("carousel-track");
+                if (!box || !big || !track) return;
+
+                function open(src, alt) {
+                    big.src = src;
+                    big.alt = alt || "";
+                    box.hidden = false;
+                    document.body.style.overflow = "hidden";
+                    closeBtn.focus();
+                }
+                function close() {
+                    box.hidden = true;
+                    big.src = "";
+                    document.body.style.overflow = "";
+                }
+
+                // Only the photo slides (not the video facade) open the lightbox.
+                track
+                    .querySelectorAll(".slide:not(.video) img")
+                    .forEach(function (img) {
+                        img.addEventListener("click", function () {
+                            open(img.currentSrc || img.src, img.alt);
+                        });
+                    });
+
+                closeBtn.addEventListener("click", close);
+                box.addEventListener("click", function (e) {
+                    if (e.target === box) close(); // click on backdrop
+                });
+                document.addEventListener("keydown", function (e) {
+                    if (e.key === "Escape" && !box.hidden) close();
+                });
             })();
         </script>
 
